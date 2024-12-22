@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Волк, Коза и Капуста</title>
+        <link rel="stylesheet" href="style.css" />
+        <link rel="icon" type="image/png" href="image/лого.png" />
+    </head>
+
+    <body>
+        <audio id="background-music" loop>
+            <source src="МузФон.mp3" type="audio/mpeg" />
+        </audio>
+        <button id="music-toggle-button"></button>
+        <div id="start-screen">
+            <div id="title"></div>
+            <img src="image/начало.jpg" alt="Start Screen Image" id="start-image" />
+            <button id="start-button">Начать</button>
+        </div>
+        <div id="instructions-screen" style="display: none">
+            <h2>Инструкции</h2>
+            <p>Перемещайте волка, козу и капусту на другой берег реки, используя лодку. За один раз вы можете перевезти только один предмет.</p>
+            <p>Будьте осторожны: если волк останется с козой, или коза с капустой без вас — они съедят друг друга!</p>
+            <button id="start-game-button">Начать игру</button>
+        </div>
+        <div id="game-container" style="display: none">
+            <div id="game">
+                <div id="left-bank">
+                    <img src="image/волк.png" alt="Волк" id="wolf" class="character" />
+                    <img src="image/Коз.png" alt="Коза" id="goat" class="character" />
+                    <img src="/image/капуста.png" alt="Капуста" id="cabbage" class="character" />
+                </div>
+                <div id="river"></div>
+                <div id="boat"></div>
+                <div id="right-bank"></div>
+                <div id="message"></div>
+                <div id="moves-container">
+                    <div id="moves">Ходы: 0</div>
+                    <div id="timer">00:00</div>
+                </div>
+            </div>
+            <div id="button-container">
+                <button id="reset-button">Начать заново</button>
+                <button id="back-to-start-button">На первую страницу</button>
+                <button id="leaderboard-toggle-button">Таблица лидеров</button>
+            </div>
+            <div id="leaderboard-container" style="display: none">
+                <h2>Таблица лидеров</h2>
+                <table id="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>№</th>
+                            <th>Имя</th>
+                            <th>Время (сек)</th>
+                            <th>Ходы</th>
+                            <th>Дата</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-body"></tbody>
+                </table>
+            </div>
+            <div id="game-over" style="display: none"></div>
+        </div>
+        <div id="loss-message-overlay" style="display: none">
+            <div id="loss-message">Игра окончена. Вы проиграли!</div>
+            <div id="loss-ok-button-container">
+                <button id="loss-ok-button">OK</button>
+            </div>
+        </div>
+
+        <div id="win-message-overlay" style="display: none">
+            <div id="win-message">
+                <input type="text" id="playerName" placeholder="Введите ваше имя" />
+            </div>
+            <button id="submit-score-button">Отправить</button>
+        </div>
+        <script src="script.js"></script>
+    </body>
+</html>

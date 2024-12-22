@@ -1,0 +1,408 @@
+body {
+    background-color: #151e15;
+    font-family: sans-serif;
+    margin: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#game-container {
+    text-align: center;
+    padding: 20px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#game {
+    display: flex;
+    position: relative;
+    height: 600px;
+    width: 1000px;
+    margin: 0 auto;
+    justify-content: center;
+    overflow: visible;
+}
+
+#game::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("image/река.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: 0;
+}
+
+#left-bank {
+    width: 260px;
+    height: 100px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    z-index: 1;
+    position: absolute;
+    top: 300px;
+    left: 0px;
+}
+
+#right-bank {
+    width: 300px;
+    height: 100px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    z-index: 1;
+    position: absolute;
+    top: 270px;
+    right: -55px;
+}
+
+#boat {
+    width: 10px;
+    height: 105px;
+    margin: 0;
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: space-around;
+    border: none;
+    background-color: transparent;
+    position: absolute;
+    top: 55%;
+    transform: translateY(-10%);
+    z-index: 2;
+    transition: transform 0.3s ease, left 0.5s ease;
+}
+
+#boat.right {
+    left: 500px;
+}
+
+.character {
+    max-width: 70px;
+    max-height: 70px;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}
+
+.character.onBoat {
+    position: relative;
+    bottom: 13px;
+    left: -120px;
+    width: 60px;
+    height: auto;
+}
+
+#moves-container {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    border: 2px solid black;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+}
+
+#moves {
+    font-size: 1.2em;
+    margin-right: 10px;
+    z-index: 10;
+    position: relative;
+}
+
+#timer {
+    font-size: 1.2em;
+    z-index: 10;
+    position: relative;
+    white-space: nowrap;
+}
+
+#game-over {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 1001;
+    display: none;
+}
+
+#game-over img {
+    max-width: 300px;
+    max-height: 200px;
+}
+
+#start-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-image: url("image/начало.jpg");
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 999;
+}
+
+#start-screen #title {
+    font-size: 4em;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    color: white;
+}
+
+#start-screen #start-image {
+    display: none;
+}
+
+#start-screen #start-button {
+    margin-top: 30vw;
+    padding: 15px 30px;
+    font-size: 1.5em;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+#instructions-screen {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 30px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    text-align: center;
+    width: 60%;
+    max-width: 600px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    display: none;
+    z-index: 1000;
+}
+
+#instructions-screen h2 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+#instructions-screen p {
+    font-size: 1.3em;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+#instructions-screen #start-game-button {
+    padding: 15px 30px;
+    font-size: 1.3em;
+    background-color: #f0f0f0;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+#loss-message-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 1002;
+    color: white;
+    text-align: center;
+}
+
+#loss-message {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    max-width: 80%;
+    font-size: 1.8em;
+    color: #000;
+    animation: fadeIn 0.3s ease-out;
+}
+
+#loss-ok-button {
+    padding: 15px 30px;
+    font-size: 1.2em;
+    background-color: #ea4444;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+#loss-ok-button:hover {
+    background-color: #dcdcdc;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#win-message-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 1002;
+}
+
+#win-message {
+    max-width: 300px;
+    max-height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#music-toggle-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+#leaderboard-container {
+    margin-top: 20px;
+    padding: 10px;
+    width: 400px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    display: none;
+}
+
+#leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+#leaderboard-table th,
+#leaderboard-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+#leaderboard-table th {
+    background-color: #f2f2f2;
+}
+
+#button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+#reset-button,
+#back-to-start-button,
+#leaderboard-toggle-button {
+    padding: 10px 20px;
+    font-size: 1.2em;
+    background-color: #f0f0f0;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+#reset-button:hover,
+#back-to-start-button:hover,
+#leaderboard-toggle-button:hover {
+    background-color: #ddd;
+    transform: scale(1.05);
+}
+
+#reset-button:active,
+#back-to-start-button:active,
+#leaderboard-toggle-button:active {
+    background-color: #ccc;
+    transform: scale(0.95);
+}
+
+.game-over-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.restart-button {
+    padding: 10px 20px;
+    font-size: 1.2em;
+    background-color: #f0f0f0;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 20px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.restart-button:hover {
+    background-color: #dcdcdc;
+    transform: scale(1.05);
+}
+
+.restart-button:active {
+    transform: scale(0.95);
+}
