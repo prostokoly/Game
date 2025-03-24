@@ -9,6 +9,12 @@ body {
     height: 100vh;
 }
 
+#mainArrBoat {
+    position: relative;
+    left: -165px;
+    transition: transform 0.3s ease, left 0.5s ease;
+}
+
 #game-container {
     text-align: center;
     padding: 20px;
@@ -67,7 +73,6 @@ body {
 }
 
 #boat {
-    width: 10px;
     height: 105px;
     margin: 0;
     background-size: contain;
@@ -76,11 +81,12 @@ body {
     justify-content: space-around;
     border: none;
     background-color: transparent;
-    position: absolute;
+    position: relative;
     top: 55%;
     transform: translateY(-10%);
     z-index: 2;
     transition: transform 0.3s ease, left 0.5s ease;
+    pointer-events: auto;
 }
 
 #boat.right {
@@ -92,12 +98,14 @@ body {
     max-height: 70px;
     cursor: pointer;
     transition: transform 0.2s ease-in-out;
+    z-index: 2;
+    pointer-events: auto;
 }
 
 .character.onBoat {
-    position: relative;
-    bottom: 13px;
-    left: -120px;
+    position: absolute;
+    bottom: 35%;
+    left: 50%;
     width: 60px;
     height: auto;
 }
@@ -177,27 +185,27 @@ body {
 }
 
 #start-screen #start-button {
-    margin-top: 30vw;
-    padding: 15px 30px;
-    font-size: 1.5em;
+    margin-top: 50vh;
+    font-size: min(10vh, 10vw);
     background-color: rgba(255, 255, 255, 0.8);
     border: none;
     cursor: pointer;
-    border-radius: 8px;
+    border-radius: 10%;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 #instructions-screen {
     position: absolute;
+    height: 80vh;
+    width: 80vw;
+    font-size: min(3vh, 3vw);
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    padding: 30px;
     background-color: rgba(255, 255, 255, 0.9);
     border-radius: 10px;
     text-align: center;
     width: 60%;
-    max-width: 600px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     display: none;
     z-index: 1000;
@@ -215,7 +223,9 @@ body {
 }
 
 #instructions-screen #start-game-button {
-    padding: 15px 30px;
+    margin: 2vh 2vw;
+    padding: 2vh 2vw;
+
     font-size: 1.3em;
     background-color: #f0f0f0;
     border: none;
@@ -270,10 +280,28 @@ body {
         opacity: 0;
         transform: translateY(-20px);
     }
+
     100% {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+#win-message-overlay #playerName {
+    padding: 10px;
+    border: 2px solid #4caf50;
+    border-radius: 5px;
+    font-size: 1.2em;
+    margin-bottom: 20px;
+    width: 300px;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+#win-message-overlay #playerName:focus {
+    outline: none;
+    border-color: #45a049;
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
 }
 
 #win-message-overlay {
@@ -283,34 +311,56 @@ body {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.7);
-    display: none;
+    display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    z-index: 1002;
+    z-index: 1001;
+    display: none;
 }
 
 #win-message {
-    max-width: 300px;
-    max-height: 200px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+#submit-score-button {
+    padding: 12px 24px;
+    font-size: 1.2em;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+#submit-score-button:hover {
+    background-color: #45a049;
+    animation: rainbow-animation 4s linear infinite;
 }
 
 #music-toggle-button {
     position: fixed;
     top: 20px;
     right: 20px;
-    width: 50px;
-    height: 50px;
+    width: min(10vh, 10vw);
+    height: min(10vh, 10vw);
     background-color: transparent;
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
     border: none;
+    background-color: transparent;
     cursor: pointer;
     transition: transform 0.3s ease;
+    z-index: 1000;
 }
 
 #leaderboard-container {
@@ -341,6 +391,9 @@ body {
 }
 
 #button-container {
+    position: absolute;
+    bottom: 10%;
+    z-index: 1000;
     display: flex;
     justify-content: center;
     align-items: center;

@@ -2,7 +2,7 @@ const items = {
     wolf: { img: "image/волк.png", eaten: ["goat"] },
     goat: { img: "image/Коз.png", eaten: ["cabbage"] },
     cabbage: { img: "image/капуста.png", eaten: [] },
-    boat: { img: "image/лодка.png", boatCapacity: 1 },
+    boat: { img: "image/Лодка.gif", boatCapacity: 1 },
 };
 
 let leftBank = ["wolf", "goat", "cabbage"];
@@ -15,6 +15,9 @@ let gameOver = false;
 const leftBankDiv = document.getElementById("left-bank");
 const rightBankDiv = document.getElementById("right-bank");
 const boatDiv = document.getElementById("boat");
+const boatArr = document.getElementById("boatArr");
+const mainArrBoat = document.getElementById("mainArrBoat");
+
 const movesDiv = document.getElementById("moves");
 const resetButton = document.getElementById("reset-button");
 const messageDiv = document.getElementById("message");
@@ -44,8 +47,17 @@ const submitScoreButton = document.getElementById("submit-score-button");
 const backToStartButton = document.getElementById("back-to-start-button");
 
 let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
-
+const resize = () => {
+    const scaleHeight = window.innerHeight / game.clientHeight;
+    const scaleWidth = window.innerWidth / game.clientWidth;
+    if (scaleHeight <= scaleWidth) {
+        gameContainer.style.scale = scaleHeight;
+    } else {
+        gameContainer.style.scale = scaleWidth;
+    }
+};
 document.addEventListener("DOMContentLoaded", () => {
+    window.addEventListener("resize", () => resize());
     const leaderboardFromStartButton = document.getElementById("leaderboard-from-start");
     const backToGameButton = document.getElementById("back-to-game");
 
@@ -83,9 +95,7 @@ function displayGameState() {
     rightBankDiv.innerHTML = "";
     boatDiv.innerHTML = "";
     movesDiv.textContent = `Ходы: ${moves}`;
-
-    boatDiv.innerHTML = `<img src="${items.boat.img}" alt="Лодка" style="cursor: pointer;">`;
-
+    boatArr.replaceChildren();
     boat.forEach((item) => {
         const img = document.createElement("img");
         img.src = items[item].img;
@@ -94,27 +104,16 @@ function displayGameState() {
         img.style.cursor = "pointer";
         img.classList.add("character");
         img.classList.add("onBoat");
-
         img.classList.add(`${item}-img`);
 
         img.addEventListener("click", () => {
             moveItem(item, "boat");
         });
-        boatDiv.appendChild(img);
+        boatArr.appendChild(img);
     });
 
     updateBank(leftBank, leftBankDiv, "left");
     updateBank(rightBank, rightBankDiv, "right");
-
-    if (boatPosition === "left") {
-        boatDiv.classList.remove("right");
-        boatDiv.style.left = "280px";
-        boatDiv.style.transform = "scaleX(1)";
-    } else {
-        boatDiv.classList.add("right");
-        boatDiv.style.left = "840px";
-        boatDiv.style.transform = "scaleX(-1)";
-    }
 }
 
 function updateBank(bank, bankDiv, bankName) {
@@ -134,16 +133,29 @@ function updateBank(bank, bankDiv, bankName) {
 }
 
 boatDiv.addEventListener("click", function () {
-    if (!gameOver) {
+    if (!gameOver && boat.length >= 0) {
         boatPosition = boatPosition === "left" ? "right" : "left";
+
+        if (boatPosition === "left") {
+            mainArrBoat.classList.remove("right");
+            mainArrBoat.style.left = "-165px";
+            mainArrBoat.style.transform = "scaleX(1)";
+        } else {
+            mainArrBoat.classList.add("right");
+            mainArrBoat.style.left = "237px";
+            mainArrBoat.style.transform = "scaleX(-1)";
+        }
         displayGameState();
+        if (!gameOver) checkLose();
     }
 });
-
 function moveItem(item, source) {
     if (gameOver) return;
-    if (boat.length >= 2 && source !== "boat") return;
+    if (boat.length >= 1 && source !== "boat") return;
     if (source === "boat" && !boat.includes(item)) return;
+
+    if (source === "left" && boatPosition !== "left") return;
+    if (source === "right" && boatPosition !== "right") return;
 
     moves++;
     if (movesDiv) {
@@ -164,9 +176,9 @@ function moveItem(item, source) {
             rightBank.push(item);
         }
     }
+
     displayGameState();
     if (!gameOver) checkWin();
-    if (!gameOver) checkLose();
 }
 
 function startTimer() {
@@ -199,22 +211,24 @@ function checkWin() {
     }
 }
 function checkLose() {
-    const onLeft = leftBank;
-    const onRight = rightBank;
     let loseMessage = "";
-    const checkBank = (bank) => {
-        if (bank.includes("wolf") && bank.includes("goat")) {
-            loseMessage = "Волк съел козу!";
-            return true;
-        }
-        if (bank.includes("goat") && bank.includes("cabbage")) {
-            loseMessage = "Коза съела капусту!";
-            return true;
+
+    const checkBank = (bank, boatPositionCheck) => {
+        if (boatPosition !== boatPositionCheck) {
+            // Если лодка не на этом берегу
+            if (bank.includes("wolf") && bank.includes("goat")) {
+                loseMessage = "Волк съел козу!";
+                return true;
+            }
+            if (bank.includes("goat") && bank.includes("cabbage")) {
+                loseMessage = "Коза съела капусту!";
+                return true;
+            }
         }
         return false;
     };
 
-    if (checkBank(onLeft) || checkBank(onRight)) {
+    if (checkBank(leftBank, "left") || checkBank(rightBank, "right")) {
         if (lossMessage) {
             lossMessage.textContent = loseMessage;
         }
@@ -226,8 +240,8 @@ function checkLose() {
     }
     return false;
 }
-
 function resetGame() {
+    mainArrBoat.style.left = "-165px";
     leftBank = ["wolf", "goat", "cabbage"];
     rightBank = [];
     boat = [];
@@ -319,6 +333,7 @@ startGameButton.addEventListener("click", () => {
     isMusicPlaying = true;
     musicToggleButton.style.backgroundImage = 'url("image/-i.jpg")';
     startTimer();
+    resize();
 });
 
 resetButton.addEventListener("click", () => {
